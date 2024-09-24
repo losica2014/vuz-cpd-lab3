@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+  input, select {
+    @apply p-1 rounded border border-gray-300 shadow-sm;
+  }
+
+  button, input[type=button] {
+    @apply bg-primary-100 py-1 px-2 rounded border border-primary-200;
+  }
+
+}
