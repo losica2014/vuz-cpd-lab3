@@ -7,7 +7,7 @@ function App() {
     { id: 2, title: "Read a book", completed: false },
   ]);
 
-  const [filter, setFilter] = useState(null);
+  const [filter, setFilter] = useState("All");
 
   const [newTodo, setNewTodo] = useState("");
 
@@ -37,9 +37,9 @@ function App() {
 
   const filterTodos = (status) => {
     switch (status) {
-      case "active":
+      case "Active":
         return todos.filter((todo) => !todo.completed);
-      case "completed":
+      case "Completed":
         return todos.filter((todo) => todo.completed);
       default:
         return todos;
@@ -51,13 +51,12 @@ function App() {
       <h1 className="text-3xl font-bold my-5">My To-Do List</h1>
       <select name="filter" id="filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
         {
-          [null, "active", "completed"].map((status) => (
+          ["All", "Active", "Completed"].map((status) => (
             <option
               key={status}
               value={status}
-              onClick={() => setFilter(status)}
             >
-              {status ? status : "All"}
+              {status}
             </option>
           ))}
       </select>
