@@ -49,6 +49,7 @@ function TodoPage() {
   return (
     <div className="container max-w-screen-md mx-auto flex flex-col gap-2">
       <h1 className="text-3xl font-bold my-5">My To-Do List</h1>
+      <a href="/dnd" className="text-blue-500 hover:text-blue-700">Перейти к Drag and Drop</a>
       <select name="filter" id="filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
         {
           ["All", "Active", "Completed"].map((status) => (

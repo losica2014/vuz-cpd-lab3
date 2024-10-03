@@ -13,7 +13,11 @@ function DndPage() {
         },
         inProgress: {
             name: 'In Progress',
-            items: [],
+            items: [
+                { id: '4', content: 'Fourth task' },
+                { id: '5', content: 'Fifth task' },
+                { id: '6', content: 'Sixth task' },
+            ],
         },
         done: {
             name: 'Done',
@@ -61,85 +65,73 @@ function DndPage() {
         setColumns({
             ...columns,
             [columnId]: {
-                ...columns[columnId].items.filter((v) => v.id == cardId)
+                ...columns[columnId],
+                items: columns[columnId].items.filter((v) => v.id != cardId)
             }
         })
     }
     return (
-        <div style={{
-            display: 'flex', justifyContent: 'center',
-            height: '100%'
-        }}>
-            <DragDropContext
-                onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
-            >
-                {Object.entries(columns).map(([columnId, column]) => {
-                    return (
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                margin: '0 20px',
-                            }}
-                            key={columnId}
-                        >
-                            <h2>{column.name}</h2>
-                            <Droppable droppableId={columnId} key={columnId}>
-                                {(provided, snapshot) => {
-                                    return (
-                                        <div
-                                            {...provided.droppableProps}
-                                            ref={provided.innerRef}
-                                            style={{
-                                                background: snapshot.isDraggingOver ?
-                                                    'lightblue' : 'lightgrey',
-                                                padding: 4,
-                                                width: 250,
-                                                minHeight: 500,
-                                            }}
-                                        >
-                                            {column.items.map((item, index) => (
-                                                <Draggable
-                                                    key={item.id}
-                                                    draggableId={item.id}
-                                                    index={index}
-                                                >
-                                                    {(provided, snapshot) => {
-                                                        return (
-                                                            <div
-                                                                ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                {...provided.dragHandleProps}
-                                                                style={{
-                                                                    userSelect: 'none',
-                                                                    padding: 16,
-                                                                    margin: '0 0 8px 0',
-                                                                    minHeight: '50px',
-                                                                    backgroundColor: snapshot.isDragging
-                                                                        ? '#263B4A'
-                                                                        : '#456C86',
-                                                                    color: 'white',
-                                                                    ...provided.draggableProps.
-                                                                        style,
-                                                                }}
-                                                            >
-                                                                {item.content}
-                                                                <button onClick={removeCard(columns, setColumns, columnId, item.id)}>Remove</button>
-                                                            </div>
-                                                        );
-                                                    }}
-                                                </Draggable>
-                                            ))}
-                                            {provided.placeholder}
-                                        </div>
-                                    );
-                                }}
-                            </Droppable>
-                        </div>
-                    );
-                })}
-            </DragDropContext>
+        <div className="container max-w-min mx-auto flex flex-col gap-2">
+            <div>
+                <h1 className="text-3xl font-bold my-5">Drag and Drop</h1>
+                <a href="/" className="text-blue-500 hover:text-blue-700">Перейти к списку задач</a>
+            </div>
+            <div className="flex gap-4 justify-center h-full">
+                <DragDropContext
+                    onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+                >
+                    {Object.entries(columns).map(([columnId, column]) => {
+                        return (
+                            <div
+                                className="flex flex-col items-center"
+                                key={columnId}
+                            >
+                                <h2>{column.name}</h2>
+                                <Droppable droppableId={columnId} key={columnId}>
+                                    {(provided, snapshot) => {
+                                        return (
+                                            <div
+                                                {...provided.droppableProps}
+                                                ref={provided.innerRef}
+                                                className={['p-2 w-56 min-h-72', snapshot.isDraggingOver ? 'bg-slate-400' : 'bg-slate-300'].join(' ')}
+                                            >
+                                                {column.items.map((item, index) => (
+                                                    <Draggable
+                                                        key={item.id}
+                                                        draggableId={item.id}
+                                                        index={index}
+                                                        disableInteractiveElementBlocking={true}
+                                                    >
+                                                        {(provided, snapshot) => {
+                                                            return (
+                                                                <div
+                                                                    className={['min-h-8 select-none p-4 mb-2 text-black', snapshot.isDragging ? 'bg-primary-500' : 'bg-primary-200'].join(' ')}
+                                                                    ref={provided.innerRef}
+                                                                    {...provided.draggableProps}
+                                                                    {...provided.dragHandleProps}
+                                                                    style={{
+                                                                        ...provided.draggableProps.
+                                                                            style,
+                                                                    }}
+                                                                >
+                                                                    <span className="mr-2">{item.content}</span>
+                                                                    <button className="" onClick={() => removeCard(columns, setColumns, columnId, item.id)}>Remove</button>
+                                                                    {/* <a onClick={removeCard(columns, setColumns, columnId, item.id)}>Remove</a> */}
+                                                                </div>
+                                                            );
+                                                        }}
+                                                    </Draggable>
+                                                ))}
+                                                {provided.placeholder}
+                                            </div>
+                                        );
+                                    }}
+                                </Droppable>
+                            </div>
+                        );
+                    })}
+                </DragDropContext>
+            </div>
         </div>
     );
 }
